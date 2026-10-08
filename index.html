@@ -36,23 +36,23 @@ h1,h2,h3,h4,.font-handwritten{font-family:'Itim',cursive}
 input[type=color].inp{height:40px;padding:2px}
 .admin-only{display:none!important}
 .editing .admin-only{display:inline-flex!important}
-.editing .review-edit-btn {display:none!important}
+.editing .review-edit-btn {display:inline-flex!important}
 .editing #review-btn-container {display:none!important}
 [data-edit]{white-space:pre-line}
 .ebtn{width:1.75rem;height:1.75rem;border-radius:9999px;background:#fff;border:1.5px solid var(--color-primary);color:var(--color-text);font-size:.7rem;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,.12);cursor:pointer}
 .ebtn:hover{background:var(--color-blush)}
 .ebtn-l{width:auto;height:1.9rem;padding:0 .75rem;gap:.35rem;font-weight:700}
-.editing footer{padding-bottom:5.5rem}
+.editing footer{padding-bottom:4.5rem}
 .btn-cute-minimal {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
+  gap: 6px;
+  padding: 6px 14px;
   background-color: #ffffff;
   border: 2px dashed var(--color-border);
   color: var(--color-text);
   font-family: 'Itim', cursive;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: bold;
   border-radius: 9999px;
   box-shadow: 0 2px 6px rgba(255,154,162,0.15);
@@ -195,13 +195,13 @@ input[type=color].inp{height:40px;padding:2px}
   <p data-edit="footer2">© 2026 Miori Studio. All Rights Reserved.</p>
   <button class="admin-only ebtn ebtn-l mx-auto" onclick="editSection('footer')"><i class="fa-solid fa-pen"></i> แก้ไขท้ายเว็บ</button>
 </footer>
-<div id="admin-bar" class="admin-only fixed bottom-2 left-1/2 -translate-x-1/2 z-40 items-center justify-center gap-1 sm:gap-2 flex-wrap bg-soft-brown text-white text-[10px] sm:text-[11px] px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-2xl shadow-soft-float max-w-[98vw]" style="background-color: var(--color-text);">
-  <span class="hidden sm:inline"><i class="fa-solid fa-pen-to-square"></i> โหมดแก้ไข</span>
-  <button onclick="editTheme()" class="btn-cute-minimal"><i class="fa-solid fa-palette"></i> ธีมสี</button>
-  <button onclick="openChangePasswordModal()" class="btn-cute-minimal"><i class="fa-solid fa-key"></i> รหัสผ่าน</button>
-  <button onclick="resetTheme()" class="btn-cute-minimal"><i class="fa-solid fa-rotate-left"></i> รีเซ็ตสี</button>
-  <button onclick="resetAll()" class="btn-cute-minimal"><i class="fa-solid fa-triangle-exclamation"></i> ทั้งหมด</button>
-  <button onclick="adminLogout()" class="px-2 py-1 bg-red-400 hover:bg-red-500 rounded-xl font-bold">ออก</button>
+<div id="admin-bar" class="admin-only fixed bottom-4 left-1/2 -translate-x-1/2 z-40 items-center justify-center gap-2 flex-wrap bg-soft-brown text-white text-[11px] px-4 py-2.5 rounded-2xl shadow-soft-float max-w-[95vw] border border-white/20" style="background-color: var(--color-text);">
+  <span><i class="fa-solid fa-pen-to-square"></i> โหมดแก้ไข:</span>
+  <button onclick="editTheme()" class="btn-cute-minimal"><i class="fa-solid fa-palette text-pink-400"></i> ธีมสี</button>
+  <button onclick="openChangePasswordModal()" class="btn-cute-minimal"><i class="fa-solid fa-key text-yellow-400"></i> รหัสผ่าน</button>
+  <button onclick="resetTheme()" class="btn-cute-minimal"><i class="fa-solid fa-rotate-left text-blue-400"></i> รีเซ็ตสี</button>
+  <button onclick="resetAll()" class="btn-cute-minimal"><i class="fa-solid fa-triangle-exclamation text-orange-400"></i> รีเซ็ตทั้งหมด</button>
+  <button onclick="adminLogout()" class="px-2.5 py-1 bg-red-400 hover:bg-red-500 rounded-xl font-bold transition">ออก</button>
 </div>
 <div id="admin-login-modal" class="fixed inset-0 bg-soft-brown/40 backdrop-blur-custom z-50 hidden flex items-center justify-center p-4">
   <div class="bg-cream-card rounded-[2rem] max-w-sm w-full p-6 relative border-2 border-soft-blush shadow-soft-float space-y-4">
@@ -330,7 +330,6 @@ function openForm(title,fields,onSave,onDelete){
     else if(f.type==='textarea')input=`<textarea id="${id}" rows="${f.rows||3}" class="inp resize-none">${v}</textarea>`;
     else if(f.type==='select')input=`<select id="${id}" class="inp">${f.options.map(o=>`<option value="${esc(o[0])}" ${o[0]==f.value?'selected':''}>${esc(o[1])}</option>`).join('')}</select>`;
     else if(f.type==='color')input=`<div class="flex items-center gap-2"><input id="${id}" type="color" value="${v}" oninput="$('${id}_txt').value=this.value" class="w-12 h-10 p-1 rounded-xl border-2 border-soft-blush bg-warm-cream cursor-pointer shrink-0"><input id="${id}_txt" type="text" value="${v}" oninput="if(/^#[0-9A-F]{6}$/i.test(this.value))$('${id}').value=this.value" class="inp uppercase"></div>`;
-    else if(f.type==='html')input=`<div id="${id}-container"></div>`;
     else input=`<input id="${id}" type="${f.type||'text'}" value="${v}" ${f.min!=null?`min="${f.min}" max="${f.max}"`:''} class="inp">`;
     return `<div><label class="block text-xs font-bold mb-1">${f.label}</label>${input}</div>`;
   }).join('');
@@ -343,19 +342,13 @@ function closeForm(){$('form-modal').classList.add('hidden');}
 function formDelete(){if(confirm('ลบรายการนี้ใช่หรือไม่?')){if(formDel)formDel();closeForm();}}
 const SECTIONS={
  header:['แก้ไขส่วนหัวเว็บ',[['siteTitle','ชื่อร้าน'],['siteJp','ข้อความข้างชื่อร้าน'],['slogan','สโลแกน'],['navStore','เมนู: หน้าร้าน'],['navReviews','เมนู: รีวิว'],['navContact','เมนู: ติดต่อเรา']],[[['logo','โลโก้ร้าน (วงกลม)',300,1]]]],
- banner:['แก้ไขแบนเนอร์หน้าร้าน',[['bannerBadge','ป้ายเล็กบนหัวข้อ'],['bannerT1','หัวข้อบรรทัดที่ 1'],['bannerT2','หัวข้อบรรทัดที่ 2'],['bannerDesc','คำอธิบาย','t'],['bannerBtn','ข้อความปุ่ม'],['bannerShip','ข้อความจัดส่ง'],['heroCaption','คำใต้รูปการ์ด']],[[['bannerStore','รูปแบนเนอร์ (1122x495)',1122],[/*'hero'*/ 'รูปการ์ดข้างแบนเนอร์',500]]]],
+ banner:['แก้ไขแบนเนอร์หน้าร้าน',[['bannerBadge','ป้ายเล็กบนหัวข้อ'],['bannerT1','หัวข้อบรรทัดที่ 1'],['bannerT2','หัวข้อบรรทัดที่ 2'],['bannerDesc','คำอธิบาย','t'],['bannerBtn','ข้อความปุ่ม'],['bannerShip','ข้อความจัดส่ง'],['heroCaption','คำใต้รูปการ์ด']],[[['bannerStore','รูปแบนเนอร์ (1122x495)',1122],['hero','รูปการ์ดข้างแบนเนอร์',500]]]],
  reviewsHead:['แก้ไขกล่องรีวิว',[['revTag','ป้ายเล็ก'],['revTitle','หัวข้อ'],['revSub','คำอธิบาย','t'],['revBtn','ข้อความปุ่มเขียนรีวิว']],[]],
- contactHead:['แก้ไขหัวข้อหน้าติดต่อ',[['siteTitle','ชื่อร้าน'],['contactSlogan','slogan','t']],[]],
+ contactHead:['แก้ไขหัวข้อหน้าติดต่อ',[['siteTitle','ชื่อร้าน'],['contactSlogan','สโลแกน','t']],[]],
  footer:['แก้ไขท้ายเว็บ',[['footer1','บรรทัดที่ 1'],['footer2','บรรทัดที่ 2']],[]]
 };
 function editSection(n){
-  // fallback mapping if SECTIONS keys differ
-  const sMap = {header:['แก้ไขส่วนหัวเว็บ',[['siteTitle','ชื่อร้าน'],['siteJp','ข้อความข้างชื่อร้าน'],['slogan','สโลแกน'],['navStore','เมนู: หน้าร้าน'],['navReviews','เมนู: รีวิว'],['navContact','เมนู: ติดต่อเรา']],[['logo','โลโก้ร้าน (วงกลม)',300,1]]],
-                banner:['แก้ไขแบนเนอร์หน้าร้าน',[['bannerBadge','ป้ายเล็กบนหัวข้อ'],['bannerT1','หัวข้อบรรทัดที่ 1'],['bannerT2','หัวข้อบรรทัดที่ 2'],['bannerDesc','คำอธิบาย','t'],['bannerBtn','ข้อความปุ่ม'],['bannerShip','ข้อความจัดส่ง'],['heroCaption','คำใต้รูปการ์ด']],[['bannerStore','รูปแบนเนอร์ (1122x495)',1122],['hero','รูปการ์ดข้างแบนเนอร์',500]]],
-                reviewsHead:['แก้ไขกล่องรีวิว',[['revTag','ป้ายเล็ก'],['revTitle','หัวข้อ'],['revSub','คำอธิบาย','t'],['revBtn','ข้อความปุ่มเขียนรีวิว']],[]],
-                contactHead:['แก้ไขหัวข้อหน้าติดต่อ',[['siteTitle','ชื่อร้าน'],['contactSlogan','สโลแกน','t']],[]],
-                footer:['แก้ไขท้ายเว็บ',[['footer1','บรรทัดที่ 1'],['footer2','บรรทัดที่ 2']],[]]};
-  const[title,tx,im]=sMap[n];
+  const[title,tx,im]=SECTIONS[n];
   const fields=[...tx.map(([k,l,t])=>({k,label:l,type:t?'textarea':'text',rows:2,value:getText(k)})),
     ...im.map(([k,l,w,png])=>({k,label:l,type:'image',maxW:w,png,value:images[k]||(k==='hero'?DEF_IMG.hero:'')}))];
   openForm(title,fields,v=>{
@@ -480,8 +473,7 @@ function editCategories(){
     container.innerHTML = tempCategories.map((c, idx) => `
       <div class="flex items-center gap-2 bg-warm-cream p-2.5 rounded-2xl border border-soft-blush">
         <div class="flex-1 space-y-1">
-          <input type="text" placeholder="รหัสหมวดหมู่ (เช่น decor)" value="${esc(c.id)}" oninput="tempCategories[${idx}].id=this.value" class="inp !py-1 !text-xs font-mono">
-          <input type="text" placeholder="ชื่อหมวดหมู่ (เช่น ของแต่งบ้าน)" value="${esc(c.name)}" oninput="tempCategories[${idx}].name=this.value" class="inp !py-1 !text-xs">
+          <input type="text" placeholder="ชื่อหมวดหมู่" value="${esc(c.name)}" oninput="tempCategories[${idx}].name=this.value" class="inp !py-1 !text-xs">
         </div>
         <button type="button" onclick="tempCategories.splice(${idx},1); renderCatList();" class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 hover:bg-red-200"><i class="fa-solid fa-trash text-xs"></i></button>
       </div>
@@ -489,10 +481,13 @@ function editCategories(){
   }
   window.tempCategories = tempCategories;
   window.renderCatList = renderCatList;
-  openForm('จัดการหมวดหมู่สินค้า',[
+  openForm('จัดการชื่อหมวดหมู่สินค้า',[
     {k:'custom_cats', label:'รายการหมวดหมู่', type:'html'}
-  ], () => {
-    categories = tempCategories.filter(c => c.id.trim() && c.name.trim());
+  ], ()=>{
+    categories = tempCategories.filter(c => c.name.trim()).map(c => ({
+      id: c.id || ('cat_' + Math.random().toString(36).substr(2, 9)),
+      name: c.name
+    }));
     save('miori_categories', categories);
     if(currentCategory !== 'all' && !categories.some(c => c.id === currentCategory)) currentCategory = 'all';
     renderCategoryChips();
@@ -500,10 +495,10 @@ function editCategories(){
     showToast('บันทึกหมวดหมู่สำเร็จ');
   });
   setTimeout(() => {
-    const fieldDiv = $('f-custom_cats-container');
+    const fieldDiv = $('f-custom_cats')?.closest('div');
     if(fieldDiv) {
       fieldDiv.innerHTML = `
-        <label class="block text-xs font-bold mb-2">รายการหมวดหมู่ทั้งหมด</label>
+        <label class="block text-xs font-bold mb-2">แก้ไขชื่อหมวดหมู่</label>
         <div id="form-cat-list" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
         <button type="button" onclick="tempCategories.push({id:'cat_'+Date.now(), name:''}); renderCatList();" class="mt-3 w-full py-2 bg-soft-blush hover:bg-blush-dark hover:text-white text-xs font-bold rounded-xl text-blush-dark border border-soft-blush flex items-center justify-center gap-1.5"><i class="fa-solid fa-plus"></i> เพิ่มหมวดหมู่ใหม่</button>
       `;
@@ -531,7 +526,7 @@ function renderProducts(){
       <span class="font-handwritten font-bold text-base">฿${esc(p.price)}</span>
       <button onclick="openProductModal(${p.id})" class="px-3 py-1.5 bg-soft-blush hover:bg-blush-dark hover:text-white text-xs font-handwritten font-bold rounded-xl">${esc(p.viewBtnText||'ดูรายละเอียด')}</button>
     </div>
-  </div>`).join('')+`<button class="admin-only min-h-[10rem] rounded-3xl border-2 border-dashed custom-border-dashed items-center justify-center gap-2 text-sm font-bold text-blush-dark bg-cream-card hover:bg-soft-blush flex flex-col" onclick="editProduct()"><i class="fa-solid fa-plus text-lg"></i> เพิ่มสินค้า</button>`;
+  </div>`).join('')+`<button class="admin-only min-h-[10rem] rounded-3xl border-2 border-dashed custom-border-dashed items-center justify-center gap-2 text-sm font-bold text-blush-dark bg-cream-card hover:bg-soft-blush" onclick="editProduct()"><i class="fa-solid fa-plus"></i> เพิ่มสินค้า</button>`;
 }
 function editProduct(id){
   const p=id?products.find(x=>x.id==id):{category:categories[0]?.id,btnText:B,btnLink:'https://line.me',viewBtnText:'ดูรายละเอียด'};
@@ -544,8 +539,7 @@ function editProduct(id){
     {k:'desc',label:'คำอธิบายสินค้า',type:'textarea',value:p.desc||''},
     {k:'viewBtnText',label:'ข้อความปุ่มดูสินค้า',value:p.viewBtnText||'ดูรายละเอียด'},
     {k:'btnText',label:'ชื่อปุ่มสั่งซื้อ',value:p.btnText||''},
-    {k:'btnLink',label:'ลิงก์ปุ่มสั่งซื้อ',value:p.btnLink||''}
-  ],v=>{
+    {k:'btnLink',label:'ลิงก์ปุ่มสั่งซื้อ',value:p.btnLink||''}],v=>{
     v.price=parseFloat(v.price)||0;
     if(formImgs.img)v.img=formImgs.img; else if(!id)v.img=PLACE; else v.img=p.img;
     if(id)Object.assign(p,v);else products.unshift({id:Date.now(),rating:5,...v});
@@ -584,9 +578,17 @@ function renderReviews(){
       <div><h4 class="font-bold text-base">${esc(r.name)}</h4><p class="text-[10px] text-muted-brown">${esc(r.date)}</p></div>
       <div class="text-yellow-400 text-xs">${'<i class="fa-solid fa-star"></i>'.repeat(r.rating)}</div>
     </div>
-    <p class="text-xs leading-relaxed">"${esc(r.comment)}"</p>
+    <p class="text-xs leading-relaxed">"${esc(r.comment)}"<p>
+    <button class="admin-only review-edit-btn ebtn absolute bottom-2 right-2" title="แก้ไขรีวิว" onclick="editReview(${r.id})"><i class="fa-solid fa-pen"></i></button>
   </div>`).join('');
   updateReviewStats();
+}
+function editReview(id){
+  const r=reviewsData.find(x=>x.id==id);if(!r)return;
+  openForm('แก้ไขรีวิว',[{k:'name',label:'ชื่อลูกค้า',value:r.name},{k:'date',label:'วันที่',value:r.date},{k:'rating',label:'คะแนนดาว',type:'number',min:1,max:5,value:r.rating},{k:'comment',label:'ข้อความรีวิว',type:'textarea',value:r.comment}],v=>{
+    r.name=v.name;r.date=v.date;r.comment=v.comment;r.rating=Math.min(5,Math.max(1,parseInt(v.rating)||5));
+    save('miori_reviews',reviewsData);renderReviews();showToast('บันทึกรีวิวสำเร็จ');},
+    ()=>{reviewsData=reviewsData.filter(x=>x.id!=id);save('miori_reviews',reviewsData);renderReviews();showToast('ลบรีวิวสำเร็จ');});
 }
 function openReviewModal(){$('review-modal').classList.remove('hidden');}
 function closeReviewModal(){$('review-modal').classList.add('hidden');}
