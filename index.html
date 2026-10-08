@@ -466,25 +466,48 @@ function renderCategoryChips(){
   $('category-chips-container').innerHTML=chip('all','ทั้งหมด')+categories.map(c=>chip(c.id,c.name)).join('');
 }
 function editCategories(){
+  let tempCategories = JSON.parse(JSON.stringify(categories));
+  
+  function renderCatList() {
+    const container = $('form-cat-list');
+    if(!container) return;
+    container.innerHTML = tempCategories.map((c, idx) => `
+      <div class="flex items-center gap-2 bg-warm-cream p-2.5 rounded-2xl border border-soft-blush">
+        <div class="flex-1 space-y-1">
+          <input type="text" placeholder="รหัสหมวดหมู่ (เช่น decor)" value="${esc(c.id)}" oninput="tempCategories[${idx}].id=this.value" class="inp !py-1 !text-xs font-mono">
+          <input type="text" placeholder="ชื่อหมวดหมู่ (เช่น ของแต่งบ้าน)" value="${esc(c.name)}" oninput="tempCategories[${idx}].name=this.value" class="inp !py-1 !text-xs">
+        </div>
+        <button type="button" onclick="tempCategories.splice(${idx},1); renderCatList();" class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 hover:bg-red-200"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('') || '<p class="text-xs text-muted-brown text-center py-4">ยังไม่มีหมวดหมู่ กดปุ่มด้านล่างเพื่อเพิ่ม</p>';
+  }
+
+  window.tempCategories = tempCategories;
+  window.renderCatList = renderCatList;
+
   openForm('จัดการหมวดหมู่สินค้า',[
-    {k:'catsJson',label:'รายการหมวดหมู่ (JSON Array)',type:'textarea',rows:6,value:JSON.stringify(categories,null,2)}
-  ],v=>{
-    try {
-      const parsed = JSON.parse(v.catsJson);
-      if(Array.isArray(parsed)){
-        categories = parsed;
-        save('miori_categories',categories);
-        if(currentCategory!=='all'&&!categories.some(c=>c.id===currentCategory))currentCategory='all';
-        renderCategoryChips();
-        renderProducts();
-        showToast('บันทึกหมวดหมู่สำเร็จ');
-      } else {
-        showToast('รูปแบบข้อมูลไม่ถูกต้อง');
-      }
-    } catch(err){
-      showToast('รูปแบบ JSON ไม่ถูกต้อง');
-    }
+    {k:'custom_cats', label:'รายการหมวดหมู่', type:'html'}
+  ], ()=>{
+    categories = tempCategories.filter(c => c.id.trim() && c.name.trim());
+    save('miori_categories', categories);
+    if(currentCategory !== 'all' && !categories.some(c => c.id === currentCategory)) currentCategory = 'all';
+    renderCategoryChips();
+    renderProducts();
+    showToast('บันทึกหมวดหมู่สำเร็จ');
   });
+
+  // Inject custom list UI into form
+  setTimeout(() => {
+    const fieldDiv = $('f-custom_cats')?.closest('div');
+    if(fieldDiv) {
+      fieldDiv.innerHTML = `
+        <label class="block text-xs font-bold mb-2">รายการหมวดหมู่ทั้งหมด</label>
+        <div id="form-cat-list" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
+        <button type="button" onclick="tempCategories.push({id:'cat_'+Date.now(), name:''}); renderCatList();" class="mt-3 w-full py-2 bg-soft-blush hover:bg-blush-dark hover:text-white text-xs font-bold rounded-xl text-blush-dark border border-soft-blush flex items-center justify-center gap-1.5"><i class="fa-solid fa-plus"></i> เพิ่มหมวดหมู่ใหม่</button>
+      `;
+      renderCatList();
+    }
+  }, 50);
 }
 function filterCategory(c){currentCategory=c;renderCategoryChips();renderProducts();}
 function renderProducts(){
